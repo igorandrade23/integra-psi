@@ -1,12 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import {
-  ArrowRight,
-  Camera,
-  CircleDotDashed,
-  Heart,
-  UsersRound,
-} from "lucide-react";
+import { Camera, Heart, UsersRound } from "lucide-react";
 import { AppShell } from "@/shared/components/app-shell";
 import { getProposals } from "@/modules/proposals/application/get-proposals";
 import { getTeamMembers } from "@/modules/team/application/get-team-members";
@@ -20,7 +14,15 @@ export default function Home() {
       <section id="inicio" className="paper-texture scroll-mt-24 px-4 py-8 md:px-8 md:py-12">
         <div className="grid gap-8 md:grid-cols-[0.95fr_1.05fr] md:items-center">
           <div className="space-y-6">
-            <div className="inline-flex rounded-full border border-brand-green/20 bg-brand-green-light px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-brand-green-dark">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border-soft bg-surface-strong px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-brand-green-dark">
+              <Image
+                src="/logo.jpeg"
+                alt=""
+                width={20}
+                height={20}
+                className="size-5 rounded-full object-cover"
+                aria-hidden="true"
+              />
               CA Silvia Lane
             </div>
             <div className="space-y-4">
@@ -34,35 +36,28 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/match"
+                href="#propostas"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-brand-green-dark px-5 text-sm font-bold text-white shadow-sm shadow-brand-green/25 transition hover:bg-brand-green"
               >
-                Jogar propostas
-                <Heart size={18} />
-              </Link>
-              <Link
-                href="#propostas"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-brand-green px-5 text-sm font-bold text-white shadow-sm shadow-brand-green/25 transition hover:bg-brand-green-dark"
-              >
-                Ver propostas
-                <ArrowRight size={18} />
+                Veja as nossas propostas
               </Link>
               <Link
                 href="#chapa"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-md border border-border-soft bg-surface-strong px-5 text-sm font-bold text-brand-green-dark transition hover:border-brand-green/40"
               >
-                Conhecer a chapa
+                Conhecer a nossa chapa
               </Link>
             </div>
           </div>
 
           <div className="relative">
             <Image
-              src="/images/conexao-psi.svg"
-              alt="Mãos conectadas por fios coloridos, representando vínculo, escuta e integração."
-              width={900}
-              height={1100}
-              className="aspect-[4/5] w-full rounded-lg border border-border-soft object-cover shadow-[0_24px_70px_rgba(31,37,34,0.14)]"
+              src="/logo.jpeg"
+              alt="Logo oficial da chapa Integra Psi"
+              width={1024}
+              height={1024}
+              sizes="(max-width: 768px) 100vw, 520px"
+              className="aspect-square w-full rounded-[2rem] border border-border-soft bg-surface-strong object-contain p-4 shadow-[0_24px_70px_rgba(31,37,34,0.14)]"
               priority
             />
           </div>
@@ -73,47 +68,33 @@ export default function Home() {
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-green">
-              Propostas
+              Nossas propostas
             </p>
-            <h2 className="mt-2 text-2xl font-black md:text-4xl">
-              O que queremos construir
-            </h2>
           </div>
-          <Link
-            href="/match"
-            className="hidden text-sm font-bold text-brand-green-dark md:inline-flex"
-          >
-            Jogar propostas
-          </Link>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-4">
-          {proposals.map((proposal, index) => (
-            <Link
+        <div className="grid gap-3 md:grid-cols-2">
+          {proposals.map((proposal) => (
+            <article
               key={proposal.slug}
-              href="/match"
-              className="rounded-lg border border-border-soft bg-surface-strong p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-green/40"
+              className="rounded-lg border border-border-soft bg-surface-strong p-4 shadow-sm"
             >
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-xs font-black uppercase tracking-[0.18em] text-brand-green">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <CircleDotDashed className="text-brand-green" size={20} />
-              </div>
-              <h3 className="mt-5 text-xl font-black">{proposal.title}</h3>
+              <h3 className="mt-3 text-lg font-black">{proposal.title}</h3>
               <p className="mt-2 line-clamp-3 text-sm leading-6 text-neutral-muted">
                 {proposal.summary}
               </p>
-            </Link>
+            </article>
           ))}
         </div>
+      </section>
 
-        <div className="mt-5 rounded-lg border border-brand-green/20 bg-gradient-to-br from-brand-green-dark to-brand-green p-5 text-white md:p-7">
-          <h3 className="text-2xl font-black">Dê match nas propostas</h3>
+      <section className="px-4 py-7 md:px-8 md:py-10">
+        <div className="rounded-lg border border-brand-green/20 bg-gradient-to-br from-brand-green-dark to-brand-green p-5 text-white md:p-7">
+          <h2 className="text-2xl font-black">Conte para gente quais propostas você mais gostou</h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-white/80">
-            A leitura completa das propostas acontece em formato de jogo: veja
-            uma proposta por vez, veja o resumo e diga o que faz sentido
-            para você.
+            Queremos ouvir você! <br /><br />
+            Clique no botão abaixo para abrir o match de propostas e nos contar quais 
+            são as propostas que mais chamaram a sua atenção. <br /><br />Sua opinião é muito importante para nós!
           </p>
           <Link
             href="/match"
@@ -140,29 +121,21 @@ export default function Home() {
           <div className="mt-6 flex items-end justify-between gap-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-green">
-                Acadêmicos da chapa
+                Integrantes da chapa
               </p>
-              <h3 className="mt-2 text-2xl font-black text-foreground">
-                {members.length} integrantes
-              </h3>
             </div>
           </div>
           <div className="mt-6 grid gap-3 md:grid-cols-2">
-            {members.map((member, index) => (
+            {members.map((member) => (
               <article
                 key={member.id}
                 className="rounded-lg border border-border-soft bg-background p-4 shadow-sm"
               >
-                <div className="flex items-start gap-3">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-full bg-brand-green-light text-sm font-black text-brand-green-dark">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <p className="text-lg font-black text-foreground">{member.name}</p>
-                    <p className="mt-1 text-sm font-semibold text-brand-green">
-                      {member.role}
-                    </p>
-                  </div>
+                <div>
+                  <p className="text-lg font-black text-foreground">{member.name}</p>
+                  <p className="mt-1 text-sm font-semibold text-brand-green">
+                    {member.role}
+                  </p>
                 </div>
               </article>
             ))}
@@ -171,7 +144,7 @@ export default function Home() {
             href="https://www.instagram.com/capsicobiguacu"
             target="_blank"
             rel="noreferrer"
-            className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-brand-green px-4 text-sm font-bold text-white transition hover:bg-brand-green-dark"
+            className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-brand-green-dark px-4 text-sm font-bold text-white transition hover:bg-brand-green"
           >
             <Camera size={18} />
             @capsicobiguacu

@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { appRoutes } from "@/shared/constants/routes";
 
 type AppShellProps = {
@@ -11,6 +12,66 @@ type AppShellProps = {
 
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
+  const [activeSection, setActiveSection] = useState<
+    "inicio" | "propostas" | "chapa" | null
+  >(null);
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      return;
+    }
+
+    const sectionIds = ["inicio", "propostas", "chapa"] as const;
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((element): element is HTMLElement => Boolean(element));
+
+    if (!sections.length) {
+      return;
+    }
+
+    const initialTimer = window.setTimeout(() => {
+      const initialHash = window.location.hash.replace("#", "");
+      if (
+        initialHash === "inicio" ||
+        initialHash === "propostas" ||
+        initialHash === "chapa"
+      ) {
+        setActiveSection(initialHash);
+      } else {
+        setActiveSection("inicio");
+      }
+    }, 0);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((left, right) => right.intersectionRatio - left.intersectionRatio);
+
+        const topEntry = visibleEntries[0];
+
+        if (!topEntry) {
+          return;
+        }
+
+        const id = topEntry.target.id;
+        if (id === "inicio" || id === "propostas" || id === "chapa") {
+          setActiveSection(id);
+        }
+      },
+      {
+        root: null,
+        threshold: [0.2, 0.4, 0.6],
+        rootMargin: "-30% 0px -45% 0px",
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+    return () => window.clearTimeout(initialTimer);
+  }, [pathname]);
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -18,9 +79,14 @@ export function AppShell({ children }: AppShellProps) {
         <header className="sticky top-0 z-30 border-b border-border-soft/80 bg-background/90 px-4 py-3 backdrop-blur-md md:px-8">
           <div className="flex items-center justify-between gap-4">
             <Link href="/" className="flex min-w-0 items-center gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-brand-green text-sm font-black text-white">
-                IP
-              </span>
+              <Image
+                src="/logo.jpeg"
+                alt="Logo da chapa Integra Psi"
+                width={44}
+                height={44}
+                className="size-11 shrink-0 rounded-full border border-border-soft object-cover shadow-sm"
+                priority
+              />
               <span className="min-w-0">
                 <span className="block truncate text-sm font-semibold uppercase tracking-[0.18em] text-brand-green-dark">
                   Integra Psi
@@ -32,9 +98,9 @@ export function AppShell({ children }: AppShellProps) {
             </Link>
             <Link
               href="/#propostas"
-              className="hidden rounded-full bg-brand-green px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-brand-green/20 transition hover:bg-brand-green-dark md:inline-flex"
+              className="hidden rounded-full bg-brand-green-dark px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-brand-green/20 transition hover:bg-brand-green md:inline-flex"
             >
-              Ver propostas
+              Veja as propostas
             </Link>
           </div>
         </header>
@@ -46,8 +112,9 @@ export function AppShell({ children }: AppShellProps) {
             {appRoutes.map((route) => {
               const Icon = route.icon;
               const isActive =
-                pathname === route.href ||
-                (route.href === "/" && pathname === "/");
+                (route.href === "/" && pathname === "/" && activeSection === "inicio") ||
+                (route.href === "/#propostas" && pathname === "/" && activeSection === "propostas") ||
+                (route.href === "/#chapa" && pathname === "/" && activeSection === "chapa");
 
               return (
                 <Link

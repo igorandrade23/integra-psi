@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   },
   description:
     "Website mobile first da chapa Integra Psi para o Centro Acadêmico Silvia Lane da Univali.",
+  icons: {
+    icon: "/logo.jpeg",
+    apple: "/logo.jpeg",
+  },
   openGraph: {
     title: "Integra Psi | CA Silvia Lane",
     description: "Conheça a chapa, integrantes e propostas da Integra Psi.",
@@ -27,7 +31,9 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className="h-full scroll-smooth antialiased"
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col bg-background text-foreground">
+        {children}
+      </body>
     </html>
   );
 }

@@ -49,10 +49,10 @@ export default function ManifestoPage() {
         </div>
 
         <Link
-          href="/propostas"
-          className="mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-md bg-brand-green px-5 text-sm font-bold text-white transition hover:bg-brand-green-dark"
+          href="/match"
+          className="mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-md bg-brand-green-dark px-5 text-sm font-bold text-white transition hover:bg-brand-green"
         >
-          Ver eixos de propostas
+          Abrir match de propostas
           <ArrowRight size={18} />
         </Link>
       </section>

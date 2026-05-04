@@ -18,8 +18,19 @@ Também deve funcionar como projeto público de portfólio no GitHub, com códig
 - Instituição: Univali
 - Curso/contexto: Psicologia
 - Cor principal: verde
+- Paleta principal:
+  - `#CBDDC3`
+  - `#B5C9A3`
+  - `#9BB898`
+  - `#88A88C`
+  - `#CFCFB2`
+  - `#D7E3C1`
+  - `#E9F3D2`
+  - `#DCE7CA`
+  - `#A8BC94`
 - Plataforma-alvo: web responsiva com prioridade mobile
 - Hospedagem preferencial: Vercel
+- Logo oficial: `logo.jpeg`
 
 ## 3. Conceito Criativo
 
@@ -27,10 +38,14 @@ A identidade visual deve remeter à Psicologia, integração, escuta, coletivida
 
 A imagem de referência enviada pela chapa, com mãos conectadas por fios coloridos, será usada como inspiração conceitual. O app pode representar propostas, pessoas e valores como pontos de uma rede viva, conectados por linhas que simbolizam diálogo, troca, acolhimento e participação estudantil.
 
+A logo em `logo.jpeg` deve ser tratada como marca principal do projeto, aparecendo na home, no cabeçalho e nos pontos de maior reconhecimento da interface, com aplicação respeitando os espaços vazios, a textura de papel e a composição original.
+
 Direção visual inicial:
 
-- verde como cor institucional principal;
-- apoio com cores de fios, como azul, amarelo e coral;
+- seguir ao máximo a paleta listada na identidade do projeto;
+- usar `#88A88C`, `#9BB898` e `#A8BC94` como verdes de destaque;
+- usar `#CBDDC3`, `#D7E3C1`, `#DCE7CA` e `#E9F3D2` como fundos suaves e áreas de respiro;
+- usar `#B5C9A3` e `#CFCFB2` como cores de apoio e equilíbrio;
 - textura leve de papel ou fundo orgânico;
 - linhas, nós e conexões como elementos recorrentes;
 - visual acolhedor, mas ainda limpo e profissional;
@@ -111,7 +126,18 @@ Ideias de apresentação:
 - filtros por área de atuação;
 - destaque para propostas prioritárias.
 
-Status: aguardando envio das propostas.
+Propostas preliminares recebidas:
+
+- aquisição de um micro-ondas;
+- realização de eventos online, como palestras, workshops e dinâmicas;
+- organização de eventos maiores e planejados por semestre, como visitas a uma aldeia indígena;
+- incentivo a projetos voluntários e experiências práticas com horas de extensão;
+- valorização de horas complementares;
+- criação de uma sala de convivência;
+- formação de um grupo de leitura;
+- abertura constante de espaço para sugestões de estudantes do curso.
+
+Status: lista preliminar em consolidação.
 
 ### 7.3 Detalhe Da Proposta
 
@@ -269,17 +295,20 @@ Tokens sugeridos:
 ```ts
 export const colors = {
   brand: {
-    green: "#1F7A4D",
-    greenDark: "#145C39",
-    greenLight: "#DDF3E7",
+    sage100: "#E9F3D2",
+    sage200: "#DCE7CA",
+    sage300: "#D7E3C1",
+    sage400: "#CBDDC3",
+    sage500: "#B5C9A3",
+    sage600: "#A8BC94",
+    sage700: "#9BB898",
+    sage800: "#88A88C",
   },
   accent: {
-    blue: "#126C86",
-    yellow: "#E3B23C",
-    coral: "#D85C4A",
+    olive: "#CFCFB2",
   },
   neutral: {
-    paper: "#F7F3EA",
+    paper: "#E9F3D2",
     ink: "#1F2522",
     muted: "#6B746F",
   },

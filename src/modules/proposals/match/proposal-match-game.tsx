@@ -187,13 +187,35 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
   }
 
   return (
-    <div className="min-h-dvh bg-[radial-gradient(circle_at_top,#f7fff8_0%,#eef8f0_48%,#dcefe3_100%)] px-4 pb-40 pt-5 text-foreground md:px-8 md:pb-5">
+    <div className="min-h-dvh bg-[radial-gradient(circle_at_top,#fbfaf4_0%,#e9f3d2_48%,#dce7ca_100%)] px-4 pb-[calc(env(safe-area-inset-bottom)+8rem)] pt-5 text-foreground md:px-8 md:pb-5">
       <div className="mx-auto flex min-h-[calc(100dvh-2.5rem)] w-full max-w-md flex-col">
-        <header className="text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-green">
-            Match de propostas
-          </p>
-          <p className="mt-1 text-xs text-neutral-muted">
+        <header className="sticky top-0 z-30 rounded-[1.5rem] border border-border-soft bg-surface-strong/90 px-4 py-4 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <Image
+              src="/logo.jpeg"
+              alt="Logo da chapa Integra Psi"
+              width={40}
+              height={40}
+              className="size-10 shrink-0 rounded-full border border-border-soft object-cover"
+              priority
+            />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-black uppercase tracking-[0.18em] text-brand-green-dark">
+                Integra Psi
+              </p>
+              <p className="truncate text-xs text-neutral-muted">
+                Match de propostas
+              </p>
+            </div>
+            <Link
+              href="/"
+              className="rounded-full border border-border-soft px-3 py-2 text-xs font-bold text-brand-green-dark transition hover:bg-brand-green-light"
+            >
+              Início
+            </Link>
+          </div>
+
+          <p className="mt-3 text-center text-xs text-neutral-muted">
             {answeredCount} de {proposals.length}
           </p>
         </header>
@@ -205,7 +227,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
           />
         </div>
 
-        <main className="flex flex-1 flex-col justify-center py-5">
+        <main className="flex flex-1 flex-col justify-center py-4 pb-4">
           {!isFinished && currentProposal ? (
             <div className="relative">
               <AnimatePresence mode="wait">
@@ -243,7 +265,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
                   }}
                   exit={{ opacity: 0, scale: 0.96 }}
                   transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                  className="relative overflow-hidden rounded-[2rem] border border-border-soft bg-surface-strong shadow-[0_28px_90px_rgba(31,37,34,0.24)]"
+                  className="relative overflow-hidden rounded-[2rem] border border-border-soft bg-surface pb-10 shadow-[0_28px_90px_rgba(31,37,34,0.24)] md:pb-5"
                 >
                   <div className="relative aspect-[4/5] w-full overflow-hidden bg-brand-green-light">
                     <Image
@@ -269,7 +291,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
                     Curti
                   </motion.div>
 
-                  <div className="p-5 text-foreground">
+                  <div className="p-4 pb-6 text-foreground md:p-5 md:pb-5">
                     <h1 className="text-balance text-4xl font-black leading-tight">
                       {currentProposal.matchTitle}
                     </h1>
@@ -278,26 +300,17 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
                     </p>
 
                     <div className="mt-5 grid gap-3">
-                      <div className="rounded-2xl border border-border-soft bg-background p-4">
-                        <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-green">
-                          Texto 1
-                        </p>
+                      <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
                         <p className="mt-2 text-sm leading-6 text-neutral-muted">
                           {currentProposal.problem}
                         </p>
                       </div>
-                      <div className="rounded-2xl border border-border-soft bg-background p-4">
-                        <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-green">
-                          Texto 2
-                        </p>
+                      <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
                         <p className="mt-2 text-sm leading-6 text-neutral-muted">
                           {currentProposal.action}
                         </p>
                       </div>
-                      <div className="rounded-2xl border border-border-soft bg-background p-4">
-                        <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-green">
-                          Texto 3
-                        </p>
+                      <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
                         <p className="mt-2 text-sm leading-6 text-neutral-muted">
                           {currentProposal.impact}
                         </p>
@@ -306,6 +319,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
                         {currentProposal.why}
                       </p>
                     </div>
+                    <div className="h-8 md:h-0" aria-hidden="true" />
                   </div>
                 </motion.article>
               </AnimatePresence>
@@ -388,7 +402,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
                   type="button"
                   onClick={submitFeedback}
                   disabled={submitState === "sending"}
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-brand-green px-5 text-sm font-black text-white transition hover:bg-brand-green-dark disabled:cursor-not-allowed disabled:opacity-70"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-brand-green-dark px-5 text-sm font-black text-white transition hover:bg-brand-green disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {submitState === "sending" ? (
                     <Loader2 className="animate-spin" size={18} />
@@ -428,7 +442,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
         </main>
 
         {!isFinished ? (
-          <footer className="fixed inset-x-0 bottom-[5.25rem] z-40 mx-auto grid max-w-md grid-cols-[1fr_auto_1fr] items-center gap-4 px-4">
+          <footer className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] z-40 mx-auto grid max-w-md grid-cols-[1fr_auto_1fr] items-center gap-4 px-4">
             <button
               type="button"
               onClick={() => vote("dislike")}
@@ -449,7 +463,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
             <button
               type="button"
               onClick={() => vote("like")}
-              className="grid h-14 place-items-center rounded-full bg-brand-green text-white shadow-lg shadow-brand-green/20"
+              className="grid h-14 place-items-center rounded-full bg-brand-green-dark text-white shadow-lg shadow-brand-green/20"
               aria-label="Curti"
             >
               <Heart size={28} />
@@ -462,7 +476,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
         <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
           {appRoutes.map((route) => {
             const Icon = route.icon;
-            const isActive = route.href === "/match";
+            const isActive = route.href === "/#propostas";
 
             return (
               <Link

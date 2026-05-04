@@ -55,7 +55,7 @@ export function ProposalsExplorer({ proposals }: ProposalsExplorerProps) {
           return (
             <Link
               key={proposal.slug}
-              href={`/propostas/${proposal.slug}`}
+              href="/match"
               className="group rounded-lg border border-border-soft bg-surface-strong p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-green/40 hover:shadow-md"
             >
               <div className="flex items-start justify-between gap-3">
@@ -76,7 +76,7 @@ export function ProposalsExplorer({ proposals }: ProposalsExplorerProps) {
               <p className="mt-3 text-sm leading-6 text-neutral-muted">{proposal.summary}</p>
               <p className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-brand-green-dark">
                 <Sparkles size={16} />
-                {isExplored ? "Proposta aberta" : "Abrir proposta"}
+                {isExplored ? "Proposta vista" : "Abrir no match"}
               </p>
             </Link>
           );
