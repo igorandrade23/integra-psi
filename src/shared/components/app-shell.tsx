@@ -69,8 +69,10 @@ export function AppShell({ children }: AppShellProps) {
 
     sections.forEach((section) => observer.observe(section));
 
-    return () => observer.disconnect();
-    return () => window.clearTimeout(initialTimer);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(initialTimer);
+    };
   }, [pathname]);
 
   return (
