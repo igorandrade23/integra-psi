@@ -227,7 +227,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
           />
         </div>
 
-        <main className="flex flex-1 flex-col justify-center py-4 pb-4">
+        <main className="flex flex-1 flex-col justify-center py-4 pb-8 md:pb-40">
           {!isFinished && currentProposal ? (
             <div className="relative">
               <AnimatePresence mode="wait">
@@ -441,7 +441,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
         </main>
 
         {!isFinished ? (
-          <footer className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] z-40 mx-auto grid max-w-md grid-cols-[1fr_auto_1fr] items-center gap-4 px-4">
+          <footer className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+6.75rem)] z-40 mx-auto grid max-w-md grid-cols-[1fr_auto_1fr] items-center gap-4 px-4">
             <button
               type="button"
               onClick={() => vote("dislike")}
