@@ -428,8 +428,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
               ) : null}
               {submitState === "missing-endpoint" ? (
                 <p className="mt-4 rounded-md bg-accent-yellow/20 px-4 py-3 text-sm font-semibold text-foreground">
-                  O jogo está funcionando, mas falta configurar
-                  `NEXT_PUBLIC_FEEDBACK_ENDPOINT` para enviar à planilha.
+                  Não foi possível enviar agora. Tente novamente em outro dia.
                 </p>
               ) : null}
               {submitState === "error" ? (

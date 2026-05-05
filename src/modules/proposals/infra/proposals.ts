@@ -35,7 +35,7 @@ export const proposals: Proposal[] = [
       "Mais acesso à formação complementar e à troca de experiências sem depender de presença física.",
     why:
       "Amplia o alcance das atividades e facilita a participação de quem tem rotina apertada.",
-    image: "/images/proposals/proposta-02.svg",
+    image: "/logo.jpeg",
     status: "texto provisório",
     accent: "blue",
   },
@@ -54,7 +54,7 @@ export const proposals: Proposal[] = [
       "Mais integração entre turmas, experiências marcantes e memória afetiva para o curso.",
     why:
       "A organização semestral dá previsibilidade e permite preparar ações com mais qualidade.",
-    image: "/images/proposals/proposta-03.svg",
+    image: "/logo.jpeg",
     status: "em construção",
     accent: "yellow",
   },
@@ -73,7 +73,7 @@ export const proposals: Proposal[] = [
       "Mais repertório, engajamento social e aprendizado conectado à realidade do território.",
     why:
       "Une formação, compromisso social e vivência prática em uma mesma proposta.",
-    image: "/images/proposals/proposta-04.svg",
+    image: "/logo.jpeg",
     status: "em construção",
     accent: "coral",
   },
@@ -92,7 +92,7 @@ export const proposals: Proposal[] = [
       "Mais segurança para planejar a trajetória acadêmica e menos perda de oportunidades úteis.",
     why:
       "Facilita a vida de quem precisa acompanhar prazos e cumprir exigências da graduação.",
-    image: "/images/conexao-psi.svg",
+    image: "/logo.jpeg",
     status: "texto provisório",
     accent: "green",
   },
@@ -130,7 +130,7 @@ export const proposals: Proposal[] = [
       "Mais repertório teórico, vínculo entre colegas e continuidade de estudo coletiva.",
     why:
       "A leitura ganha mais sentido quando vira diálogo e construção conjunta.",
-    image: "/images/proposals/proposta-03.svg",
+    image: "/logo.jpeg",
     status: "texto provisório",
     accent: "yellow",
   },
@@ -149,7 +149,7 @@ export const proposals: Proposal[] = [
       "Mais diálogo, mais proximidade com a base e decisões mais conectadas às necessidades reais.",
     why:
       "A chapa se fortalece quando a construção é coletiva e aberta à participação.",
-    image: "/images/proposals/proposta-04.svg",
+    image: "/logo.jpeg",
     status: "texto provisório",
     accent: "coral",
   },

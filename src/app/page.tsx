@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Camera, Heart, UsersRound } from "lucide-react";
+import { Heart, UsersRound } from "lucide-react";
 import { AppShell } from "@/shared/components/app-shell";
 import { getProposals } from "@/modules/proposals/application/get-proposals";
 import { getTeamMembers } from "@/modules/team/application/get-team-members";
+import { TeamShowcase } from "@/modules/team/presentation/team-showcase";
 
 export default function Home() {
   const proposals = getProposals();
@@ -107,48 +108,21 @@ export default function Home() {
       </section>
 
       <section id="chapa" className="scroll-mt-24 px-4 pb-10 md:px-8">
-        <div className="rounded-lg border border-border-soft bg-surface-strong p-5 md:p-8">
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-green">
-            Chapa
-          </p>
-          <h2 className="mt-3 flex items-center gap-3 text-2xl font-black md:text-3xl">
-            <UsersRound className="text-brand-green" size={28} />
-            Integra Psi
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-neutral-muted md:text-base">
-            Conheça as pessoas que compõem a chapa para o CA Silvia Lane.
-          </p>
-          <div className="mt-6 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-green">
-                Integrantes da chapa
-              </p>
-            </div>
+        <div className="space-y-5">
+          <div className="rounded-[2rem] border border-border-soft bg-surface-strong p-5 shadow-sm md:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-green">
+              Chapa
+            </p>
+            <h2 className="mt-3 flex items-center gap-3 text-2xl font-black md:text-3xl">
+              <UsersRound className="text-brand-green" size={28} />
+              Integra Psi
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-neutral-muted md:text-base">
+              Conheça as pessoas que compõem a chapa para o CA Silvia Lane.
+            </p>
           </div>
-          <div className="mt-6 grid gap-3 md:grid-cols-2">
-            {members.map((member) => (
-              <article
-                key={member.id}
-                className="rounded-lg border border-border-soft bg-background p-4 shadow-sm"
-              >
-                <div>
-                  <p className="text-lg font-black text-foreground">{member.name}</p>
-                  <p className="mt-1 text-sm font-semibold text-brand-green">
-                    {member.role}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
-          <Link
-            href="https://www.instagram.com/capsicobiguacu"
-            target="_blank"
-            rel="noreferrer"
-            className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-brand-green-dark px-4 text-sm font-bold text-white transition hover:bg-brand-green"
-          >
-            <Camera size={18} />
-            @capsicobiguacu
-          </Link>
+
+          <TeamShowcase members={members} />
         </div>
       </section>
     </AppShell>

@@ -18,6 +18,7 @@ export function AppShell({ children }: AppShellProps) {
 
   useEffect(() => {
     if (pathname !== "/") {
+      setActiveSection(null);
       return;
     }
 
@@ -42,6 +43,13 @@ export function AppShell({ children }: AppShellProps) {
         setActiveSection("inicio");
       }
     }, 0);
+
+    const onHashChange = () => {
+      const nextHash = window.location.hash.replace("#", "");
+      if (nextHash === "inicio" || nextHash === "propostas" || nextHash === "chapa") {
+        setActiveSection(nextHash);
+      }
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -68,10 +76,12 @@ export function AppShell({ children }: AppShellProps) {
     );
 
     sections.forEach((section) => observer.observe(section));
+    window.addEventListener("hashchange", onHashChange);
 
     return () => {
       observer.disconnect();
       window.clearTimeout(initialTimer);
+      window.removeEventListener("hashchange", onHashChange);
     };
   }, [pathname]);
 
