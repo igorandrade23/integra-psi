@@ -102,8 +102,8 @@ export function TeamShowcase({ members }: TeamShowcaseProps) {
               <X size={18} />
             </button>
 
-            <div className="flex h-full min-h-0 flex-col overflow-hidden md:grid md:grid-cols-[0.9fr_1.1fr] md:items-start">
-              <div className="relative h-[42dvh] min-h-72 shrink-0 overflow-hidden bg-brand-green-light/25 md:h-full md:min-h-0">
+            <div className="flex h-full min-h-0 flex-col overflow-hidden md:grid md:h-full md:min-h-0 md:grid-cols-[0.9fr_1.1fr] md:items-stretch">
+              <div className="relative aspect-[4/5] shrink-0 overflow-hidden bg-brand-green-light/25 md:h-full md:aspect-auto md:min-h-0">
                 {hasModalImageError || !selectedMember.photo ? (
                   <div className="flex h-full flex-col items-center justify-center gap-4 bg-[radial-gradient(circle_at_top,_rgba(111,163,75,0.18),_rgba(244,241,232,0.94)_55%,_rgba(255,255,255,1)_100%)] px-6 text-center">
                     <div className="grid size-28 place-items-center rounded-full border border-border-soft bg-white/85 text-3xl font-black tracking-[0.14em] text-brand-green-dark shadow-sm">
@@ -124,7 +124,7 @@ export function TeamShowcase({ members }: TeamShowcaseProps) {
                     src={selectedMember.photo}
                     alt={`Foto de ${selectedMember.name}`}
                     fill
-                    className="object-cover object-top"
+                    className="object-cover md:object-cover"
                     sizes="(max-width: 768px) 100vw, 44rem"
                     priority
                     onError={() => setHasModalImageError(true)}
@@ -148,7 +148,7 @@ export function TeamShowcase({ members }: TeamShowcaseProps) {
                 </button>
               </div>
 
-              <div className="flex min-h-0 flex-1 flex-col space-y-4 overflow-y-auto p-5 pt-4 md:space-y-5 md:p-8">
+              <div className="flex min-h-0 flex-1 flex-col space-y-4 overflow-y-auto p-5 pt-4 md:h-full md:space-y-5 md:p-8">
                 <div className="space-y-2 pr-20 md:pr-24">
                   <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-green-dark">
                     Integrante da chapa
