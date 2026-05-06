@@ -28,13 +28,14 @@
   --color-surface: var(--surface);
   --color-surface-strong: var(--surface-strong);
   --color-border-soft: var(--border-soft);
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
 
 ::selection {
@@ -45,6 +46,10 @@ body {
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+}
+
+.font-display {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
 }
 
 .paper-texture {

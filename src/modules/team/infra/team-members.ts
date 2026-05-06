@@ -31,7 +31,10 @@ Ver o Centro Acadêmico Silvia Lane finalmente saindo do papel é uma grande rea
     id: "ananda",
     name: "Ananda Venâncio",
     role: "Diretora de Comunicação",
-    description: "A definir.",
+    description: `oii gente, meu nome é Ananda, tenho 22 anos e estou no sexto período de psicologia pela Univali no campus do Biguaçu.
+Ao longo da minha trajetória acadêmica meus interesses nunca foram constantes, a cada semestre que conheço uma coisa nova, que um mundo novo se apresenta, eu fico imersa naquilo. Mas se fosse para dizer o que meu olhar escolhe observar seria a Psicologia Social, como essa constante troca entre indivíduo, mundo e suas organizações se manifesta. E também existe um lado meu que gosta de neurociência. E psicanálise.  
+
+No âmbito pessoal, eu amo ler. Adoro a sensação de estar imersa em palavras, de sentir o tempo desse jeito. Acho que tudo vai, mas me conforta saber que a leitura sempre vai ficar comigo. Também amo Taylor Swift, e isso felizmente, faz muito parte de mim. E talvez seja estranho, mas eu gosto muito da vida acadêmica, é um ambiente que pode ser muito hostil, mas eu fico feliz em ter encontrado as pessoas certas que contribuem para aguentar os perrengues acadêmicos. No final, são sobre as pessoas. Talvez por isso que tenha escolhido psicologia, e talvez por isso que tenha escolhido fazer parte desse projeto do Centro. Espero que vocês também encontrem essa sensação.`,
     photo: "/images/chapa/membros/ananda.png",
   },
   {

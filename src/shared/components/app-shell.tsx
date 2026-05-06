@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { appRoutes } from "@/shared/constants/routes";
+import { triggerHomeVideoTap } from "@/shared/lib/home-video-tap";
 
 type AppShellProps = {
   children: ReactNode;
@@ -110,6 +111,7 @@ export function AppShell({ children }: AppShellProps) {
             </Link>
             <Link
               href="/#propostas"
+              onClick={triggerHomeVideoTap}
               className="hidden rounded-full bg-brand-green-dark px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-brand-green/20 transition hover:bg-brand-green md:inline-flex"
             >
               Veja as propostas
@@ -117,7 +119,7 @@ export function AppShell({ children }: AppShellProps) {
           </div>
         </header>
 
-        <main className="flex-1 pb-24 md:pb-10">{children}</main>
+        <main className="flex-1 bg-[#f6f2e7] pb-24 md:pb-10">{children}</main>
 
         <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border-soft bg-surface-strong/94 px-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2 shadow-[0_-16px_40px_rgba(31,37,34,0.08)] backdrop-blur-md md:hidden">
           <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
