@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import {
   Check,
   Heart,
@@ -12,7 +11,7 @@ import {
   X,
 } from "lucide-react";
 import { AnimatePresence, animate, motion, useMotionValue, useTransform } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Proposal } from "@/modules/proposals/domain/proposal";
 import { appRoutes } from "@/shared/constants/routes";
 
@@ -20,6 +19,7 @@ type ProposalVote = "like" | "dislike";
 
 type StoredMatchState = {
   sessionId: string;
+  currentIndex: number;
   votes: Record<string, ProposalVote>;
   history: string[];
   suggestion: string;
@@ -29,6 +29,9 @@ type SubmitState = "idle" | "sending" | "sent" | "missing-endpoint" | "error";
 type ActionEffect = ProposalVote | null;
 
 const storageKey = "integra-psi:proposal-match";
+const SWIPE_COMMIT_DELAY_MS = 260;
+const SWIPE_EXIT_DISTANCE = 420;
+const MIN_SWIPE_THRESHOLD = 92;
 
 function createSessionId() {
   return `sess-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
@@ -37,10 +40,20 @@ function createSessionId() {
 function createInitialState(): StoredMatchState {
   return {
     sessionId: createSessionId(),
+    currentIndex: 0,
     votes: {},
     history: [],
     suggestion: "",
   };
+}
+
+function getSwipeThreshold() {
+  if (typeof window === "undefined") {
+    return MIN_SWIPE_THRESHOLD;
+  }
+
+  const width = Math.min(window.innerWidth, 420);
+  return Math.max(MIN_SWIPE_THRESHOLD, Math.min(Math.round(width * 0.22), 140));
 }
 
 type ProposalMatchGameProps = {
@@ -52,12 +65,14 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [actionEffect, setActionEffect] = useState<ActionEffect>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [exitDirection, setExitDirection] = useState<ProposalVote | null>(null);
 
   const dragX = useMotionValue(0);
-  const dragRotation = useTransform(dragX, [-260, 0, 260], [-10, 0, 10]);
+  const dragRotation = useTransform(dragX, [-260, 0, 260], [-9, 0, 9]);
   const likeOpacity = useTransform(dragX, [36, 118], [0, 1]);
   const dislikeOpacity = useTransform(dragX, [-118, -36], [1, 0]);
+  const transitionTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -65,10 +80,14 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
 
       if (raw) {
         const parsed = JSON.parse(raw) as Partial<StoredMatchState>;
+        const fallbackHistory = parsed.history ?? Object.keys(parsed.votes ?? {});
+        const fallbackIndex = parsed.currentIndex ?? fallbackHistory.length;
+
         setState({
           sessionId: parsed.sessionId ?? createSessionId(),
+          currentIndex: Math.min(Math.max(0, fallbackIndex), proposals.length),
           votes: parsed.votes ?? {},
-          history: parsed.history ?? Object.keys(parsed.votes ?? {}),
+          history: fallbackHistory,
           suggestion: parsed.suggestion ?? "",
         });
       }
@@ -77,7 +96,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
-  }, []);
+  }, [proposals.length]);
 
   useEffect(() => {
     if (isLoaded) {
@@ -85,7 +104,15 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
     }
   }, [isLoaded, state]);
 
-  const currentProposal = proposals.find((proposal) => !state.votes[proposal.slug]);
+  useEffect(() => {
+    return () => {
+      if (transitionTimerRef.current !== null) {
+        window.clearTimeout(transitionTimerRef.current);
+      }
+    };
+  }, []);
+
+  const currentProposal = proposals[state.currentIndex] ?? null;
   const liked = useMemo(
     () => proposals.filter((proposal) => state.votes[proposal.slug] === "like"),
     [proposals, state.votes],
@@ -94,50 +121,96 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
     () => proposals.filter((proposal) => state.votes[proposal.slug] === "dislike"),
     [proposals, state.votes],
   );
-  const answeredCount = liked.length + disliked.length;
-  const isFinished = answeredCount === proposals.length;
+  const totalSteps = proposals.length + 1;
+  const currentStep = Math.min(state.currentIndex + 1, totalSteps);
+  const isFinished = !currentProposal;
 
-  function registerVote(voteValue: ProposalVote) {
+  function clearTransitionTimer() {
+    if (transitionTimerRef.current !== null) {
+      window.clearTimeout(transitionTimerRef.current);
+      transitionTimerRef.current = null;
+    }
+  }
+
+  function commitVote(voteValue: ProposalVote) {
     if (!currentProposal) {
       return;
     }
 
     setSubmitState("idle");
-    setState((current) => ({
-      ...current,
-      votes: {
+    setIsTransitioning(false);
+    setActionEffect(null);
+    setExitDirection(voteValue);
+    setState((current) => {
+      const nextVotes = {
         ...current.votes,
         [currentProposal.slug]: voteValue,
-      },
-      history: current.history.includes(currentProposal.slug)
+      };
+
+      const nextHistory = current.history.includes(currentProposal.slug)
         ? current.history
-        : [...current.history, currentProposal.slug],
-    }));
-    setExitDirection(null);
+        : [...current.history, currentProposal.slug];
+
+      return {
+        ...current,
+        currentIndex: Math.min(current.currentIndex + 1, proposals.length),
+        votes: nextVotes,
+        history: nextHistory,
+      };
+    });
+
     dragX.set(0);
   }
 
   function vote(voteValue: ProposalVote) {
-    setExitDirection(voteValue);
+    if (!currentProposal || isTransitioning) {
+      return;
+    }
+
+    clearTransitionTimer();
+
+    setSubmitState("idle");
+    setIsTransitioning(true);
     setActionEffect(voteValue);
-    window.setTimeout(() => setActionEffect(null), 620);
-    window.setTimeout(() => registerVote(voteValue), 240);
+    setExitDirection(voteValue);
+
+    const targetX = voteValue === "like" ? SWIPE_EXIT_DISTANCE : -SWIPE_EXIT_DISTANCE;
+
+    animate(dragX, targetX, {
+      type: "spring",
+      stiffness: 320,
+      damping: 30,
+    });
+
+    transitionTimerRef.current = window.setTimeout(() => {
+      commitVote(voteValue);
+      transitionTimerRef.current = null;
+    }, SWIPE_COMMIT_DELAY_MS);
   }
 
   function undoLastVote() {
+    if (isTransitioning) {
+      return;
+    }
+
     const lastSlug = state.history.at(-1);
 
     if (!lastSlug) {
       return;
     }
 
+    clearTransitionTimer();
     setSubmitState("idle");
+    setActionEffect(null);
+    dragX.set(0);
+
     setState((current) => {
       const nextVotes = { ...current.votes };
       delete nextVotes[lastSlug];
 
       return {
         ...current,
+        currentIndex: Math.max(current.currentIndex - 1, 0),
         votes: nextVotes,
         history: current.history.slice(0, -1),
       };
@@ -145,9 +218,13 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
   }
 
   function resetGame() {
+    clearTransitionTimer();
     const nextState = createInitialState();
     setState(nextState);
     setSubmitState("idle");
+    setActionEffect(null);
+    setIsTransitioning(false);
+    dragX.set(0);
     window.localStorage.setItem(storageKey, JSON.stringify(nextState));
   }
 
@@ -187,87 +264,52 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
   }
 
   return (
-    <div className="min-h-dvh bg-[radial-gradient(circle_at_top,#fbfaf4_0%,#e9f3d2_48%,#dce7ca_100%)] px-4 pb-[calc(env(safe-area-inset-bottom)+8rem)] pt-5 text-foreground md:px-8 md:pb-5">
+    <div className="min-h-dvh overflow-hidden bg-[radial-gradient(circle_at_top,#fbfaf4_0%,#e9f3d2_48%,#dce7ca_100%)] px-4 pb-[calc(env(safe-area-inset-bottom)+8rem)] pt-5 text-foreground md:px-8 md:pb-5">
       <div className="mx-auto flex min-h-[calc(100dvh-2.5rem)] w-full max-w-md flex-col">
-        <header className="sticky top-0 z-30 rounded-[1.5rem] border border-border-soft bg-surface-strong/90 px-4 py-4 backdrop-blur-md">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/logo.jpeg"
-              alt="Logo da chapa Integra Psi"
-              width={40}
-              height={40}
-              className="size-10 shrink-0 rounded-full border border-border-soft object-cover"
-              priority
-            />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-black uppercase tracking-[0.18em] text-brand-green-dark">
-                Integra Psi
-              </p>
-              <p className="truncate text-xs text-neutral-muted">
-                Match de propostas
-              </p>
-            </div>
-            <Link
-              href="/"
-              className="rounded-full border border-border-soft px-3 py-2 text-xs font-bold text-brand-green-dark transition hover:bg-brand-green-light"
-            >
-              Início
-            </Link>
-          </div>
-
-          <p className="mt-3 text-center text-xs text-neutral-muted">
-            {answeredCount} de {proposals.length}
+        <header className="py-2">
+          <p className="text-center text-sm font-semibold text-neutral-muted">
+            {currentStep} de {totalSteps}
           </p>
         </header>
 
-        <div className="mt-5 h-2 overflow-hidden rounded-full bg-brand-green-light">
-          <div
-            className="h-full rounded-full bg-brand-green transition-all"
-            style={{ width: `${(answeredCount / proposals.length) * 100}%` }}
-          />
-        </div>
-
-        <main className="flex flex-1 flex-col justify-center py-4 pb-8 md:pb-40">
+        <main className="relative flex flex-1 flex-col justify-center pb-8 pt-2 md:pb-40">
           {!isFinished && currentProposal ? (
-            <div className="relative">
-              <AnimatePresence mode="wait">
+            <div className="relative mx-auto w-full max-w-[28rem]">
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.article
                   key={currentProposal.slug}
                   drag="x"
-                  dragConstraints={{ left: -260, right: 260 }}
-                  dragElastic={0.12}
+                  dragElastic={0.1}
                   dragMomentum={false}
-                  style={{ x: dragX, rotate: dragRotation }}
+                  style={{ x: dragX, rotate: dragRotation, touchAction: "pan-y" }}
                   onDragEnd={(_, info) => {
-                    if (info.offset.x > 96) {
-                      vote("like");
+                    if (Math.abs(info.offset.x) < getSwipeThreshold()) {
+                      animate(dragX, 0, {
+                        type: "spring",
+                        stiffness: 340,
+                        damping: 26,
+                      });
                       return;
                     }
 
-                    if (info.offset.x < -96) {
-                      vote("dislike");
-                      return;
-                    }
-
-                    animate(dragX, 0, {
-                      type: "spring",
-                      stiffness: 320,
-                      damping: 28,
-                    });
+                    vote(info.offset.x > 0 ? "like" : "dislike");
                   }}
-                  initial={{ opacity: 0, y: 18, scale: 0.97 }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    x: exitDirection === "like" ? 900 : exitDirection === "dislike" ? -900 : 0,
-                    rotate: exitDirection === "like" ? 14 : exitDirection === "dislike" ? -14 : 0,
+                  initial={{
+                    opacity: 0,
+                    y: 18,
+                    scale: 0.98,
+                    x: exitDirection === "like" ? 48 : exitDirection === "dislike" ? -48 : 0,
                   }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                  className="relative overflow-hidden rounded-[2rem] border border-border-soft bg-surface pb-10 shadow-[0_28px_90px_rgba(31,37,34,0.24)] md:pb-5"
+                  animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
+                  exit={{
+                    opacity: 0,
+                    x: exitDirection === "like" ? 260 : exitDirection === "dislike" ? -260 : 0,
+                    scale: 0.98,
+                  }}
+                  transition={{ type: "spring", stiffness: 260, damping: 26 }}
+                  className="relative flex flex-col overflow-hidden rounded-[2rem] border border-border-soft bg-surface shadow-[0_28px_90px_rgba(31,37,34,0.24)] will-change-transform"
                 >
-                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-brand-green-light">
+                  <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-brand-green-light">
                     <Image
                       src={currentProposal.image}
                       alt={`Imagem placeholder da ${currentProposal.title}`}
@@ -280,18 +322,18 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
 
                   <motion.div
                     style={{ opacity: dislikeOpacity }}
-                    className="absolute left-5 top-16 rotate-[-10deg] rounded-xl border-2 border-accent-coral bg-black/28 px-5 py-2 text-lg font-black uppercase tracking-[0.2em] text-accent-coral backdrop-blur"
+                    className="pointer-events-none absolute left-4 top-4 rounded-xl border border-accent-coral bg-black/28 px-4 py-2 text-sm font-black uppercase tracking-[0.22em] text-accent-coral backdrop-blur-md"
                   >
                     Não curti
                   </motion.div>
                   <motion.div
                     style={{ opacity: likeOpacity }}
-                    className="absolute right-5 top-16 rotate-[10deg] rounded-xl border-2 border-brand-green-light bg-black/28 px-5 py-2 text-lg font-black uppercase tracking-[0.2em] text-brand-green-light backdrop-blur"
+                    className="pointer-events-none absolute right-4 top-4 rounded-xl border border-brand-green-light bg-black/28 px-4 py-2 text-sm font-black uppercase tracking-[0.22em] text-brand-green-light backdrop-blur-md"
                   >
                     Curti
                   </motion.div>
 
-                  <div className="p-4 pb-6 text-foreground md:p-5 md:pb-5">
+                  <div className="p-5 pb-10 text-foreground md:p-6 md:pb-10">
                     <h1 className="text-balance text-4xl font-black leading-tight">
                       {currentProposal.matchTitle}
                     </h1>
@@ -301,42 +343,63 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
 
                     <div className="mt-5 grid gap-3">
                       <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
+                        <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-green-dark">
+                          Problema
+                        </p>
                         <p className="mt-2 text-sm leading-6 text-neutral-muted">
                           {currentProposal.problem}
                         </p>
                       </div>
                       <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
+                        <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-green-dark">
+                          Proposta
+                        </p>
                         <p className="mt-2 text-sm leading-6 text-neutral-muted">
                           {currentProposal.action}
                         </p>
                       </div>
                       <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
+                        <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-green-dark">
+                          Impacto
+                        </p>
                         <p className="mt-2 text-sm leading-6 text-neutral-muted">
                           {currentProposal.impact}
                         </p>
                       </div>
-                      <p className="sr-only">
-                        {currentProposal.why}
-                      </p>
+                      <p className="sr-only">{currentProposal.why}</p>
                     </div>
-                    <div className="h-8 md:h-0" aria-hidden="true" />
                   </div>
                 </motion.article>
               </AnimatePresence>
 
               <AnimatePresence>
+                {isTransitioning ? (
+                  <motion.div
+                    key={`loading-${currentProposal.slug}`}
+                    className="pointer-events-none absolute inset-x-0 top-1/2 z-20 grid -translate-y-1/2 place-items-center"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <div className="flex items-center gap-3 rounded-full border border-border-soft bg-surface-strong/95 px-4 py-3 text-sm font-bold text-brand-green-dark shadow-[0_16px_40px_rgba(31,37,34,0.14)] backdrop-blur-md">
+                      <Loader2 className="animate-spin" size={18} />
+                      Carregando próxima proposta
+                    </div>
+                  </motion.div>
+                ) : null}
+
                 {actionEffect ? (
                   <motion.div
-                    key={actionEffect}
-                    className="pointer-events-none fixed inset-0 z-50 grid place-items-center"
+                    key={`action-${currentProposal.slug}-${actionEffect}`}
+                    className="pointer-events-none absolute inset-0 z-30 grid place-items-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                   >
                     <motion.div
-                      initial={{ scale: 0.45, rotate: actionEffect === "like" ? -10 : 10 }}
-                      animate={{ scale: [0.45, 1.18, 0.9], rotate: 0, opacity: [0, 1, 0] }}
-                      transition={{ duration: 0.62, ease: "easeOut" }}
+                      initial={{ scale: 0.5, rotate: actionEffect === "like" ? -8 : 8 }}
+                      animate={{ scale: [0.5, 1.14, 0.92], rotate: 0, opacity: [0, 1, 0] }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
                       className={`grid size-32 place-items-center rounded-full border backdrop-blur ${
                         actionEffect === "like"
                           ? "border-brand-green-light bg-brand-green/30 text-brand-green-light"
@@ -453,7 +516,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
             <button
               type="button"
               onClick={undoLastVote}
-              disabled={state.history.length === 0}
+              disabled={state.history.length === 0 || isTransitioning}
               className="grid size-12 place-items-center rounded-full border border-border-soft bg-surface-strong text-brand-green-dark shadow-lg disabled:cursor-not-allowed disabled:opacity-40"
               aria-label="Desfazer último voto"
             >
@@ -478,7 +541,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
             const isActive = route.href === "/#propostas";
 
             return (
-              <Link
+              <a
                 key={route.href}
                 href={route.href}
                 target={route.href.startsWith("http") ? "_blank" : undefined}
@@ -491,11 +554,12 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
               >
                 <Icon aria-hidden="true" size={20} strokeWidth={2.2} />
                 <span>{route.label}</span>
-              </Link>
+              </a>
             );
           })}
         </div>
       </nav>
+
     </div>
   );
 }

@@ -15,10 +15,10 @@ export function AppShell({ children }: AppShellProps) {
   const [activeSection, setActiveSection] = useState<
     "inicio" | "propostas" | "chapa" | null
   >(null);
+  const resolvedActiveSection = pathname === "/" ? activeSection : null;
 
   useEffect(() => {
     if (pathname !== "/") {
-      setActiveSection(null);
       return;
     }
 
@@ -124,9 +124,9 @@ export function AppShell({ children }: AppShellProps) {
             {appRoutes.map((route) => {
               const Icon = route.icon;
               const isActive =
-                (route.href === "/" && pathname === "/" && activeSection === "inicio") ||
-                (route.href === "/#propostas" && pathname === "/" && activeSection === "propostas") ||
-                (route.href === "/#chapa" && pathname === "/" && activeSection === "chapa");
+                (route.href === "/" && resolvedActiveSection === "inicio") ||
+                (route.href === "/#propostas" && resolvedActiveSection === "propostas") ||
+                (route.href === "/#chapa" && resolvedActiveSection === "chapa");
 
               return (
                 <Link

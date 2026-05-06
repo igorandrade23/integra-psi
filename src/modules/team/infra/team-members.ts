@@ -32,7 +32,7 @@ export const teamMembers: TeamMember[] = [
   },
   {
     id: "gabriela",
-    name: "Gabriela Martendal",
+    name: "Gabriela Martendal Hoffmann",
     role: "Tesoureira",
     description: "A definir.",
     photo: "/images/chapa/membros/gabriela.png",

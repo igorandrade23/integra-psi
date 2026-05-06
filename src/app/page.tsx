@@ -15,17 +15,6 @@ export default function Home() {
       <section id="inicio" className="paper-texture scroll-mt-24 px-4 py-8 md:px-8 md:py-12">
         <div className="grid gap-8 md:grid-cols-[0.95fr_1.05fr] md:items-center">
           <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border-soft bg-surface-strong px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-brand-green-dark">
-              <Image
-                src="/logo.jpeg"
-                alt=""
-                width={20}
-                height={20}
-                className="size-5 rounded-full object-cover"
-                aria-hidden="true"
-              />
-              CA Silvia Lane
-            </div>
             <div className="space-y-4">
               <h1 className="text-balance text-4xl font-black leading-[1.02] text-foreground md:text-6xl">
                 Integra Psi

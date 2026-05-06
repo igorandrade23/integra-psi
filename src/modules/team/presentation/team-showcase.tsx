@@ -2,7 +2,7 @@
 
 import { ImageOff, ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { TeamMember } from "@/modules/team/domain/team-member";
 import { TeamCarousel } from "@/modules/team/presentation/team-carousel";
 
@@ -28,25 +28,23 @@ export function TeamShowcase({ members }: TeamShowcaseProps) {
     [selectedMember.name],
   );
 
-  const openModal = (index: number) => {
+  const openModal = useCallback((index: number) => {
     setSelectedIndex(index);
     setIsOpen(true);
     setHasModalImageError(false);
-  };
+  }, []);
 
-  const closeModal = () => setIsOpen(false);
+  const closeModal = useCallback(() => setIsOpen(false), []);
 
-  const goToPrevious = () => {
-    setSelectedIndex((current) => (current - 1 + members.length) % members.length);
-  };
-
-  const goToNext = () => {
-    setSelectedIndex((current) => (current + 1) % members.length);
-  };
-
-  useEffect(() => {
+  const goToPrevious = useCallback(() => {
     setHasModalImageError(false);
-  }, [selectedIndex]);
+    setSelectedIndex((current) => (current - 1 + members.length) % members.length);
+  }, [members.length]);
+
+  const goToNext = useCallback(() => {
+    setHasModalImageError(false);
+    setSelectedIndex((current) => (current + 1) % members.length);
+  }, [members.length]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -74,7 +72,7 @@ export function TeamShowcase({ members }: TeamShowcaseProps) {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [isOpen]);
+  }, [closeModal, goToNext, goToPrevious, isOpen]);
 
   return (
     <>
