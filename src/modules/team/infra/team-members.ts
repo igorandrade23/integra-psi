@@ -5,7 +5,14 @@ export const teamMembers: TeamMember[] = [
     id: "luisa",
     name: "Luísa Hoffmann",
     role: "Presidente",
-    description: "A definir.",
+    description: `Oii, sou a Luísa. Tenho 22 anos e sou estudante do terceiro período de psicologia da UNIVALI, campus Biguaçu. Atualmente, faço parte do colegiado do curso, além disso participei no início do ano no Curso de Verão em Neurociências da UFSC.
+Meus interesses acadêmicos são diversos, gosto de psicopatologia, psicofármacos e desenvolvimento infantil. Tenho um carinho muito especial por trabalhar com crianças, pois me encanta a forma como elas enxergam o mundo, com leveza, curiosidade e verdade. Para mim, isso é algo realmente fascinante.
+Um dos meus projetos é seguir na vida acadêmica, fazendo mestrado e doutorado, com o objetivo de me tornar professora universitária.
+
+Para além da vida universitária, sou uma pessoa muito sonhadora. Gosto de imaginar as possibilidades e os caminhos que a vida pode oferecer, mas também amo muito os momentos simples, como estar com a minha família e ter esse tempo de qualidade com eles. 
+Ao longo do meu processo de autoconhecimento, fui percebendo que a música e a leitura, além de me deixarem feliz, também me ajudam a me regular emocionalmente. São momentos em que consigo relaxar, me acalmar e me reconectar, hoje tornaram-se essenciais na minha vida.
+
+Ver o Centro Acadêmico Silvia Lane finalmente saindo do papel é uma grande realização para mim. O último ano foi intenso, mas muito enriquecedor. Esse movimento representa um grande avanço para a comunidade acadêmica, pois abre espaço para mais diálogo, participação e construção coletiva, fortalecendo a voz dos estudantes e tornando nossa vivência universitária ainda mais significativa.`,
     photo: "/images/chapa/membros/luisa.png",
   },
   {
@@ -81,7 +88,7 @@ Espero poder contribuir de forma ativa, colaborativa e comprometida com o fortal
     name: "Igor Andrade",
     role: "Primeiro Secretário",
     description:
-      `Olá, pessoal, me chamo Igor, estou no segundo semestre de Psicologia no campus de Biguaçu.
+      `Olá, pessoal, me chamo Igor, estou no segundo semestre de Psicologia no campus de Biguaçu. Atuo como representante de turma de meu período e como profissão sou programador.
       Tenho interesse em seguir nas áreas relacionadas a pesquisas científicas voltadas à Psicologia Social, pois é uma área que me fascina e que tem muito a contribuir para a compreensão dos fenômenos sociais e das relações humanas.
       Acredito que a Psicologia Social é fundamental para entender como as pessoas interagem, como as normas sociais influenciam o comportamento e como os grupos se formam e se mantêm.
       Além da minha vida acadêmica tenho interesse em games (como The Legend of Zelda <3), cinema, literatura filosófica, científica e política. Meus autores preferidos são Thomas Sowell, George Orwell, Marize Schons, Patrícia Silva, Muniz Sodré, entre outros.
