@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { appRoutes } from "@/shared/constants/routes";
-import { triggerHomeVideoTap } from "@/shared/lib/home-video-tap";
 
 type AppShellProps = {
   children: ReactNode;
@@ -89,7 +88,7 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col">
-        <header className="sticky top-0 z-30 border-b border-border-soft/80 bg-background/90 px-4 py-3 backdrop-blur-md md:px-8">
+        <header className="sticky top-0 z-30 -mb-px bg-[#f6f2e7]/96 px-4 py-2 backdrop-blur-md md:px-8 md:py-2.5">
           <div className="flex items-center justify-between gap-4">
             <Link href="/" className="flex min-w-0 items-center gap-3">
               <Image
@@ -111,8 +110,7 @@ export function AppShell({ children }: AppShellProps) {
             </Link>
             <Link
               href="/#propostas"
-              onClick={triggerHomeVideoTap}
-              className="hidden rounded-full bg-brand-green-dark px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-brand-green/20 transition hover:bg-brand-green md:inline-flex"
+              className="hidden rounded-full border border-white/10 bg-brand-green-dark px-4 py-2 text-sm font-semibold tracking-[-0.01em] text-white shadow-[0_12px_26px_rgba(69,86,74,0.18)] transition duration-300 hover:-translate-y-0.5 hover:bg-brand-green hover:shadow-[0_16px_30px_rgba(69,86,74,0.22)] active:translate-y-[1px] md:inline-flex"
             >
               Veja as propostas
             </Link>

@@ -141,10 +141,10 @@ export function HomeStaticSections({ proposals, members }: HomeStaticSectionsPro
           <Link
             href="/match"
             onClick={triggerHomeVideoTap}
-            className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-white px-4 text-sm font-bold text-brand-green-dark transition hover:-translate-y-0.5 hover:bg-white/95"
+            className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/15 bg-white px-4 text-sm font-semibold tracking-[-0.01em] text-brand-green-dark shadow-[0_10px_22px_rgba(69,86,74,0.12)] transition duration-300 hover:-translate-y-0.5 hover:bg-white/95 hover:shadow-[0_14px_26px_rgba(69,86,74,0.14)] active:translate-y-[1px]"
           >
             Abrir match de propostas
-            <Heart size={18} />
+            <Heart size={18} className="fill-current stroke-[1.8]" />
           </Link>
         </motion.div>
       </motion.section>

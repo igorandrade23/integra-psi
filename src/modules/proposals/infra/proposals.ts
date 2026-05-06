@@ -16,7 +16,7 @@ export const proposals: Proposal[] = [
       "Mais conforto, autonomia e cuidado com a rotina de quem passa o dia na universidade.",
     why:
       "É uma solução pequena, mas muito concreta, que melhora a experiência diária de muita gente.",
-    image: "/logo.jpeg",
+    image: "/images/proposals/proposal-microwave.png",
     status: "texto provisório",
     accent: "green",
   },
@@ -35,7 +35,7 @@ export const proposals: Proposal[] = [
       "Mais acesso à formação complementar e à troca de experiências sem depender de presença física.",
     why:
       "Amplia o alcance das atividades e facilita a participação de quem tem rotina apertada.",
-    image: "/logo.jpeg",
+    image: "/images/proposals/proposal-events-online.png",
     status: "texto provisório",
     accent: "blue",
   },
@@ -54,7 +54,7 @@ export const proposals: Proposal[] = [
       "Mais integração entre turmas, experiências marcantes e memória afetiva para o curso.",
     why:
       "A organização semestral dá previsibilidade e permite preparar ações com mais qualidade.",
-    image: "/logo.jpeg",
+    image: "/images/proposals/proposal-semester-events.png",
     status: "em construção",
     accent: "yellow",
   },
@@ -73,7 +73,7 @@ export const proposals: Proposal[] = [
       "Mais repertório, engajamento social e aprendizado conectado à realidade do território.",
     why:
       "Une formação, compromisso social e vivência prática em uma mesma proposta.",
-    image: "/logo.jpeg",
+    image: "/images/proposals/proposal-volunteer-projects.png",
     status: "em construção",
     accent: "coral",
   },
@@ -92,7 +92,7 @@ export const proposals: Proposal[] = [
       "Mais segurança para planejar a trajetória acadêmica e menos perda de oportunidades úteis.",
     why:
       "Facilita a vida de quem precisa acompanhar prazos e cumprir exigências da graduação.",
-    image: "/logo.jpeg",
+    image: "/images/proposals/proposal-complementary-hours.png",
     status: "texto provisório",
     accent: "green",
   },
@@ -111,7 +111,7 @@ export const proposals: Proposal[] = [
       "Mais pertencimento, cuidado e possibilidade de convivência entre colegas.",
     why:
       "Um espaço assim fortalece vínculo e ajuda a humanizar a rotina universitária.",
-    image: "/logo.jpeg",
+    image: "/images/proposals/proposal-convivence-room.png",
     status: "em construção",
     accent: "blue",
   },
@@ -130,7 +130,7 @@ export const proposals: Proposal[] = [
       "Mais repertório teórico, vínculo entre colegas e continuidade de estudo coletiva.",
     why:
       "A leitura ganha mais sentido quando vira diálogo e construção conjunta.",
-    image: "/logo.jpeg",
+    image: "/images/proposals/proposal-reading-group.png",
     status: "texto provisório",
     accent: "yellow",
   },
@@ -149,7 +149,7 @@ export const proposals: Proposal[] = [
       "Mais diálogo, mais proximidade com a base e decisões mais conectadas às necessidades reais.",
     why:
       "A chapa se fortalece quando a construção é coletiva e aberta à participação.",
-    image: "/logo.jpeg",
+    image: "/images/proposals/proposal-suggestions-open-space.png",
     status: "texto provisório",
     accent: "coral",
   },

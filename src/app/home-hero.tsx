@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { HOME_VIDEO_TAP_EVENT, triggerHomeVideoTap } from "@/shared/lib/home-video-tap";
+import { handleSlowScrollClick } from "@/shared/lib/slow-scroll";
 
 export function HomeHero() {
   const reduceMotion = useReducedMotion();
@@ -27,7 +28,7 @@ export function HomeHero() {
     const sync = () => {
       const viewportHeight = window.innerHeight;
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-      const scrollRange = Math.max((section.offsetHeight - viewportHeight) * 1.7, 1);
+      const scrollRange = Math.max((section.offsetHeight - viewportHeight) * 0.9, 1);
       const rawProgress = (window.scrollY - sectionTop) / scrollRange;
       const nextProgress = Math.min(Math.max(rawProgress, 0), 1);
 
@@ -118,10 +119,8 @@ export function HomeHero() {
   }, [reduceMotion, videoCardControls]);
 
   return (
-    <section ref={sectionRef} className="relative -mt-4 min-h-[220dvh] md:-mt-5 md:min-h-[260dvh]">
+    <section ref={sectionRef} className="relative min-h-[220dvh] md:min-h-[260dvh]">
       <div className="sticky top-0 h-[100dvh] overflow-hidden bg-[#f6f2e7]">
-        <div className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(246,242,231,0.98),rgba(246,242,231,0))] pointer-events-none" />
-
         <div className="relative z-10 flex h-full items-center justify-center px-4 py-0 md:px-8 md:py-0">
           <div className="mx-auto flex w-full max-w-7xl flex-col items-center">
             <div className="w-full max-w-6xl">
@@ -142,11 +141,11 @@ export function HomeHero() {
                 />
                 <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(246,242,231,0.02),transparent_52%,rgba(246,242,231,0.05)_86%,rgba(246,242,231,0.15))]" />
                 <div className="pointer-events-none absolute inset-x-4 bottom-4 h-1.5 overflow-hidden rounded-full bg-[#dcd5c3]/70 md:inset-x-5 md:bottom-5">
-                <div
-                  className="h-full rounded-full bg-brand-green-dark/60"
-                  style={{ width: `${Math.max(progress * 100, 3)}%` }}
-                />
-              </div>
+                  <div
+                    className="h-full rounded-full bg-brand-green-dark/60"
+                    style={{ width: `${Math.max(progress * 100, 3)}%` }}
+                  />
+                </div>
               </motion.div>
             </div>
 
@@ -158,16 +157,22 @@ export function HomeHero() {
             >
               <Link
                 href="#propostas"
-                onClick={triggerHomeVideoTap}
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-brand-green-dark px-4 text-sm font-bold text-white shadow-sm shadow-brand-green/20 transition hover:bg-brand-green md:h-12 md:px-5"
+                onClick={(event) => {
+                  triggerHomeVideoTap();
+                  handleSlowScrollClick(event, "#propostas");
+                }}
+                className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/10 bg-brand-green-dark px-4 text-sm font-semibold tracking-[-0.01em] text-white shadow-[0_12px_28px_rgba(69,86,74,0.22)] transition duration-300 hover:-translate-y-0.5 hover:bg-brand-green hover:shadow-[0_16px_34px_rgba(69,86,74,0.26)] active:translate-y-[1px] md:h-12 md:px-5"
               >
                 Veja as nossas propostas
-                <ArrowRight size={17} />
+                <ArrowRight className="transition-transform duration-300 group-hover:translate-x-0.5" size={17} />
               </Link>
               <Link
                 href="#chapa"
-                onClick={triggerHomeVideoTap}
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-border-soft bg-white/70 px-4 text-sm font-bold text-brand-green-dark transition hover:bg-white md:h-12 md:px-5"
+                onClick={(event) => {
+                  triggerHomeVideoTap();
+                  handleSlowScrollClick(event, "#chapa");
+                }}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#d9e0c8] bg-white/72 px-4 text-sm font-semibold tracking-[-0.01em] text-brand-green-dark shadow-[0_10px_22px_rgba(69,86,74,0.08)] backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_28px_rgba(69,86,74,0.1)] active:translate-y-[1px] md:h-12 md:px-5"
               >
                 Conhecer a nossa chapa
               </Link>
@@ -179,8 +184,11 @@ export function HomeHero() {
               <motion.a
                 href="#propostas"
                 aria-label="Continuar rolando para ver o restante da página"
-                onClick={triggerHomeVideoTap}
-                className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/75 px-3 py-2 text-[0.7rem] font-semibold tracking-[0.16em] text-brand-green-dark shadow-[0_10px_24px_rgba(31,37,34,0.08)] backdrop-blur-lg"
+                onClick={(event) => {
+                  triggerHomeVideoTap();
+                  handleSlowScrollClick(event, "#propostas");
+                }}
+                className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/72 px-3 py-2 text-[0.68rem] font-semibold tracking-[0.18em] text-brand-green-dark shadow-[0_10px_22px_rgba(31,37,34,0.08)] backdrop-blur-lg transition duration-300 hover:-translate-y-0.5 hover:bg-white/82 active:translate-y-[1px]"
                 animate={{ y: [0, 4, 0] }}
                 transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
                 style={{ opacity: Math.max(0, 1 - progress * 1.1) }}
