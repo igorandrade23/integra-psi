@@ -182,18 +182,18 @@ export function TeamCarousel({ members, onReadMore }: TeamCarouselProps) {
                 : index;
 
             return (
-            <div
-              key={member.id}
-              data-team-slide
-              className="w-full shrink-0 px-1 sm:px-2 md:px-3"
-            >
-              <div className="mx-auto w-full max-w-[22rem]">
-                <TeamCard
-                  member={member}
-                  onReadMore={onReadMore ? () => onReadMore(originalIndex) : undefined}
-                />
+              <div
+                key={`${member.id}-${index}`}
+                data-team-slide
+                className="w-full shrink-0 px-1 sm:px-2 md:px-3"
+              >
+                <div className="mx-auto w-full max-w-[22rem]">
+                  <TeamCard
+                    member={member}
+                    onReadMore={onReadMore ? () => onReadMore(originalIndex) : undefined}
+                  />
+                </div>
               </div>
-            </div>
             );
           })}
         </div>

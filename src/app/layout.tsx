@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Website mobile first da chapa Integra Psi para o Centro Acadêmico Silvia Lane da Univali.",
   icons: {
-    icon: "/logo.jpeg",
+    icon: "/icon.png",
     apple: "/logo.jpeg",
   },
   openGraph: {

@@ -23,6 +23,7 @@ type StoredMatchState = {
   votes: Record<string, ProposalVote>;
   history: string[];
   suggestion: string;
+  feedbackSent: boolean;
 };
 
 type SubmitState = "idle" | "sending" | "sent" | "missing-endpoint" | "error";
@@ -44,6 +45,7 @@ function createInitialState(): StoredMatchState {
     votes: {},
     history: [],
     suggestion: "",
+    feedbackSent: false,
   };
 }
 
@@ -89,6 +91,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
           votes: parsed.votes ?? {},
           history: fallbackHistory,
           suggestion: parsed.suggestion ?? "",
+          feedbackSent: parsed.feedbackSent ?? false,
         });
       }
 
@@ -236,6 +239,11 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
       return;
     }
 
+    if (state.feedbackSent) {
+      setSubmitState("sent");
+      return;
+    }
+
     setSubmitState("sending");
 
     const payload = {
@@ -258,6 +266,10 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
       });
 
       setSubmitState("sent");
+      setState((current) => ({
+        ...current,
+        feedbackSent: true,
+      }));
     } catch {
       setSubmitState("error");
     }
@@ -464,15 +476,17 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
                 <button
                   type="button"
                   onClick={submitFeedback}
-                  disabled={submitState === "sending"}
+                  disabled={submitState === "sending" || state.feedbackSent}
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-brand-green-dark px-5 text-sm font-black text-white transition hover:bg-brand-green disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {submitState === "sending" ? (
                     <Loader2 className="animate-spin" size={18} />
+                  ) : state.feedbackSent ? (
+                    <Check size={18} />
                   ) : (
                     <Send size={18} />
                   )}
-                  Enviar feedback
+                  {state.feedbackSent ? "Feedback enviado" : "Enviar feedback"}
                 </button>
                 <button
                   type="button"
@@ -487,6 +501,11 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
               {submitState === "sent" ? (
                 <p className="mt-4 rounded-md bg-brand-green-light px-4 py-3 text-sm font-semibold text-brand-green-dark">
                   Feedback enviado. Obrigado por participar.
+                </p>
+              ) : null}
+              {state.feedbackSent && submitState !== "sending" && submitState !== "sent" ? (
+                <p className="mt-4 rounded-md bg-brand-green-light px-4 py-3 text-sm font-semibold text-brand-green-dark">
+                  Você já enviou esse feedback.
                 </p>
               ) : null}
               {submitState === "missing-endpoint" ? (
