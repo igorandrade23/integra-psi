@@ -33,6 +33,7 @@ const storageKey = "integra-psi:proposal-match";
 const SWIPE_COMMIT_DELAY_MS = 260;
 const SWIPE_EXIT_DISTANCE = 420;
 const MIN_SWIPE_THRESHOLD = 92;
+const SHOW_PROPOSAL_DETAILS = false;
 
 function createSessionId() {
   return `sess-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
@@ -60,9 +61,10 @@ function getSwipeThreshold() {
 
 type ProposalMatchGameProps = {
   proposals: Proposal[];
+  embedded?: boolean;
 };
 
-export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
+export function ProposalMatchGame({ proposals, embedded = false }: ProposalMatchGameProps) {
   const [state, setState] = useState<StoredMatchState>(() => createInitialState());
   const [isLoaded, setIsLoaded] = useState(false);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
@@ -228,7 +230,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
     setActionEffect(null);
     setIsTransitioning(false);
     dragX.set(0);
-    window.localStorage.setItem(storageKey, JSON.stringify(nextState));
+    window.localStorage.removeItem(storageKey);
   }
 
   async function submitFeedback() {
@@ -236,11 +238,6 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
 
     if (!endpoint) {
       setSubmitState("missing-endpoint");
-      return;
-    }
-
-    if (state.feedbackSent) {
-      setSubmitState("sent");
       return;
     }
 
@@ -270,21 +267,40 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
         ...current,
         feedbackSent: true,
       }));
+      window.localStorage.removeItem(storageKey);
     } catch {
       setSubmitState("error");
     }
   }
 
   return (
-    <div className="min-h-dvh overflow-hidden bg-[radial-gradient(circle_at_top,#fbfaf4_0%,#e9f3d2_48%,#dce7ca_100%)] px-4 pb-[calc(env(safe-area-inset-bottom)+8rem)] pt-5 text-foreground md:px-8 md:pb-5">
-      <div className="mx-auto flex min-h-[calc(100dvh-2.5rem)] w-full max-w-md flex-col">
+    <div
+      className={
+        embedded
+          ? "overflow-hidden rounded-[2.5rem] border border-border-soft bg-[radial-gradient(circle_at_top,#fbfaf4_0%,#e9f3d2_48%,#dce7ca_100%)] px-4 py-5 text-foreground md:px-6"
+          : "min-h-dvh overflow-hidden bg-[radial-gradient(circle_at_top,#fbfaf4_0%,#e9f3d2_48%,#dce7ca_100%)] px-4 pb-[calc(env(safe-area-inset-bottom)+8rem)] pt-5 text-foreground md:px-8 md:pb-5"
+      }
+    >
+      <div
+        className={
+          embedded
+            ? "mx-auto flex w-full max-w-[42rem] flex-col"
+            : "mx-auto flex min-h-[calc(100dvh-2.5rem)] w-full max-w-md flex-col"
+        }
+      >
         <header className="py-2">
           <p className="text-center text-sm font-semibold text-neutral-muted">
             {currentStep} de {totalSteps}
           </p>
         </header>
 
-        <main className="relative flex flex-1 flex-col justify-center pb-8 pt-2 md:pb-40">
+        <main
+          className={
+            embedded
+              ? "relative flex flex-1 flex-col justify-center pb-4 pt-2"
+              : "relative flex flex-1 flex-col justify-center pb-8 pt-2 md:pb-40"
+          }
+        >
           {!isFinished && currentProposal ? (
             <div className="relative mx-auto w-full max-w-[28rem]">
               <AnimatePresence mode="wait" initial={false}>
@@ -353,33 +369,35 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
                       {currentProposal.summary}
                     </p>
 
-                    <div className="mt-5 grid gap-3">
-                      <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
-                        <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-green-dark">
-                          Problema
-                        </p>
-                        <p className="mt-2 text-sm leading-6 text-neutral-muted">
-                          {currentProposal.problem}
-                        </p>
+                    {SHOW_PROPOSAL_DETAILS ? (
+                      <div className="mt-5 grid gap-3">
+                        <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
+                          <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-green-dark">
+                            Problema
+                          </p>
+                          <p className="mt-2 text-sm leading-6 text-neutral-muted">
+                            {currentProposal.problem}
+                          </p>
+                        </div>
+                        <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
+                          <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-green-dark">
+                            Proposta
+                          </p>
+                          <p className="mt-2 text-sm leading-6 text-neutral-muted">
+                            {currentProposal.action}
+                          </p>
+                        </div>
+                        <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
+                          <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-green-dark">
+                            Impacto
+                          </p>
+                          <p className="mt-2 text-sm leading-6 text-neutral-muted">
+                            {currentProposal.impact}
+                          </p>
+                        </div>
+                        <p className="sr-only">{currentProposal.why}</p>
                       </div>
-                      <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
-                        <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-green-dark">
-                          Proposta
-                        </p>
-                        <p className="mt-2 text-sm leading-6 text-neutral-muted">
-                          {currentProposal.action}
-                        </p>
-                      </div>
-                      <div className="rounded-2xl border border-border-soft bg-brand-green-light/35 p-4">
-                        <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-green-dark">
-                          Impacto
-                        </p>
-                        <p className="mt-2 text-sm leading-6 text-neutral-muted">
-                          {currentProposal.impact}
-                        </p>
-                      </div>
-                      <p className="sr-only">{currentProposal.why}</p>
-                    </div>
+                    ) : null}
                   </div>
                 </motion.article>
               </AnimatePresence>
@@ -481,8 +499,6 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
                 >
                   {submitState === "sending" ? (
                     <Loader2 className="animate-spin" size={18} />
-                  ) : state.feedbackSent ? (
-                    <Check size={18} />
                   ) : (
                     <Send size={18} />
                   )}
@@ -491,6 +507,7 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
                 <button
                   type="button"
                   onClick={resetGame}
+                  disabled={state.feedbackSent}
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-md border border-border-soft bg-white px-5 text-sm font-black text-brand-green-dark"
                 >
                   <RotateCcw size={18} />
@@ -523,61 +540,93 @@ export function ProposalMatchGame({ proposals }: ProposalMatchGameProps) {
         </main>
 
         {!isFinished ? (
-          <footer className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+6.75rem)] z-40 mx-auto grid max-w-md grid-cols-[1fr_auto_1fr] items-center gap-4 px-4">
-            <button
-              type="button"
-              onClick={() => vote("dislike")}
-              className="grid h-14 place-items-center rounded-full border border-brand-green/20 bg-white text-brand-green-dark shadow-lg shadow-brand-green/10"
-              aria-label="Não curti"
-            >
-              <X size={28} />
-            </button>
-            <button
-              type="button"
-              onClick={undoLastVote}
-              disabled={state.history.length === 0 || isTransitioning}
-              className="grid size-12 place-items-center rounded-full border border-border-soft bg-surface-strong text-brand-green-dark shadow-lg disabled:cursor-not-allowed disabled:opacity-40"
-              aria-label="Desfazer último voto"
-            >
-              <Undo2 size={20} />
-            </button>
-            <button
-              type="button"
-              onClick={() => vote("like")}
-              className="grid h-14 place-items-center rounded-full bg-brand-green-dark text-white shadow-lg shadow-brand-green/20"
-              aria-label="Curti"
-            >
-              <Heart size={28} />
-            </button>
-          </footer>
+          embedded ? (
+            <footer className="mx-auto mt-5 grid w-full max-w-[28rem] grid-cols-[1fr_auto_1fr] items-center gap-4">
+              <button
+                type="button"
+                onClick={() => vote("dislike")}
+                className="grid h-14 place-items-center rounded-full border border-brand-green/20 bg-white text-brand-green-dark shadow-lg shadow-brand-green/10"
+                aria-label="Não curti"
+              >
+                <X size={28} />
+              </button>
+              <button
+                type="button"
+                onClick={undoLastVote}
+                disabled={state.history.length === 0 || isTransitioning}
+                className="grid size-12 place-items-center rounded-full border border-border-soft bg-surface-strong text-brand-green-dark shadow-lg disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label="Desfazer último voto"
+              >
+                <Undo2 size={20} />
+              </button>
+              <button
+                type="button"
+                onClick={() => vote("like")}
+                className="grid h-14 place-items-center rounded-full bg-brand-green-dark text-white shadow-lg shadow-brand-green/20"
+                aria-label="Curti"
+              >
+                <Heart size={28} />
+              </button>
+            </footer>
+          ) : (
+            <footer className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+6.75rem)] z-40 mx-auto grid max-w-md grid-cols-[1fr_auto_1fr] items-center gap-4 px-4">
+              <button
+                type="button"
+                onClick={() => vote("dislike")}
+                className="grid h-14 place-items-center rounded-full border border-brand-green/20 bg-white text-brand-green-dark shadow-lg shadow-brand-green/10"
+                aria-label="Não curti"
+              >
+                <X size={28} />
+              </button>
+              <button
+                type="button"
+                onClick={undoLastVote}
+                disabled={state.history.length === 0 || isTransitioning}
+                className="grid size-12 place-items-center rounded-full border border-border-soft bg-surface-strong text-brand-green-dark shadow-lg disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label="Desfazer último voto"
+              >
+                <Undo2 size={20} />
+              </button>
+              <button
+                type="button"
+                onClick={() => vote("like")}
+                className="grid h-14 place-items-center rounded-full bg-brand-green-dark text-white shadow-lg shadow-brand-green/20"
+                aria-label="Curti"
+              >
+                <Heart size={28} />
+              </button>
+            </footer>
+          )
         ) : null}
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border-soft bg-surface-strong/94 px-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2 shadow-[0_-16px_40px_rgba(31,37,34,0.08)] backdrop-blur-md md:hidden">
-        <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
-          {appRoutes.map((route) => {
-            const Icon = route.icon;
-            const isActive = route.href === "/#propostas";
+      {embedded ? null : (
+        <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border-soft bg-surface-strong/94 px-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2 shadow-[0_-16px_40px_rgba(31,37,34,0.08)] backdrop-blur-md md:hidden">
+          <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
+            {appRoutes.map((route) => {
+              const Icon = route.icon;
+              const isActive = route.href === "/#match";
 
-            return (
-              <a
-                key={route.href}
-                href={route.href}
-                target={route.href.startsWith("http") ? "_blank" : undefined}
-                rel={route.href.startsWith("http") ? "noreferrer" : undefined}
-                className={`flex h-14 flex-col items-center justify-center gap-1 rounded-md text-[0.68rem] font-semibold transition ${
-                  isActive
-                    ? "bg-brand-green-light text-brand-green-dark"
-                    : "text-neutral-muted hover:bg-brand-green-light/60 hover:text-brand-green-dark"
-                }`}
-              >
-                <Icon aria-hidden="true" size={20} strokeWidth={2.2} />
-                <span>{route.label}</span>
-              </a>
-            );
-          })}
-        </div>
-      </nav>
+              return (
+                <a
+                  key={route.href}
+                  href={route.href}
+                  target={route.href.startsWith("http") ? "_blank" : undefined}
+                  rel={route.href.startsWith("http") ? "noreferrer" : undefined}
+                  className={`flex h-14 flex-col items-center justify-center gap-1 rounded-md text-[0.68rem] font-semibold transition ${
+                    isActive
+                      ? "bg-brand-green-light text-brand-green-dark"
+                      : "text-neutral-muted hover:bg-brand-green-light/60 hover:text-brand-green-dark"
+                  }`}
+                >
+                  <Icon aria-hidden="true" size={20} strokeWidth={2.2} />
+                  <span>{route.label}</span>
+                </a>
+              );
+            })}
+          </div>
+        </nav>
+      )}
 
     </div>
   );

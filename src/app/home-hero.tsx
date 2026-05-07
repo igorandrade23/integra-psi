@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { HOME_VIDEO_TAP_EVENT, triggerHomeVideoTap } from "@/shared/lib/home-video-tap";
-import { handleSlowScrollClick } from "@/shared/lib/slow-scroll";
 
 export function HomeHero() {
   const reduceMotion = useReducedMotion();
@@ -156,25 +155,19 @@ export function HomeHero() {
               transition={{ duration: 0.45, delay: 0.08 }}
             >
               <Link
-                href="#propostas"
-                onClick={(event) => {
-                  triggerHomeVideoTap();
-                  handleSlowScrollClick(event, "#propostas");
-                }}
+                href="/#match"
+                onClick={triggerHomeVideoTap}
                 className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/10 bg-brand-green-dark px-4 text-sm font-semibold tracking-[-0.01em] text-white shadow-[0_12px_28px_rgba(69,86,74,0.22)] transition duration-300 hover:-translate-y-0.5 hover:bg-brand-green hover:shadow-[0_16px_34px_rgba(69,86,74,0.26)] active:translate-y-[1px] md:h-12 md:px-5"
               >
-                Veja as nossas propostas
+                Veja nossas propostas
                 <ArrowRight className="transition-transform duration-300 group-hover:translate-x-0.5" size={17} />
               </Link>
               <Link
-                href="#chapa"
-                onClick={(event) => {
-                  triggerHomeVideoTap();
-                  handleSlowScrollClick(event, "#chapa");
-                }}
+                href="/#chapa"
+                onClick={triggerHomeVideoTap}
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#d9e0c8] bg-white/72 px-4 text-sm font-semibold tracking-[-0.01em] text-brand-green-dark shadow-[0_10px_22px_rgba(69,86,74,0.08)] backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_14px_28px_rgba(69,86,74,0.1)] active:translate-y-[1px] md:h-12 md:px-5"
               >
-                Conhecer a nossa chapa
+                Conheça nossa chapa
               </Link>
             </motion.div>
 
@@ -182,12 +175,9 @@ export function HomeHero() {
 
             {!reduceMotion ? (
               <motion.a
-                href="#propostas"
+                href="/#match"
                 aria-label="Continuar rolando para ver o restante da página"
-                onClick={(event) => {
-                  triggerHomeVideoTap();
-                  handleSlowScrollClick(event, "#propostas");
-                }}
+                onClick={triggerHomeVideoTap}
                 className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/72 px-3 py-2 text-[0.68rem] font-semibold tracking-[0.18em] text-brand-green-dark shadow-[0_10px_22px_rgba(31,37,34,0.08)] backdrop-blur-lg transition duration-300 hover:-translate-y-0.5 hover:bg-white/82 active:translate-y-[1px]"
                 animate={{ y: [0, 4, 0] }}
                 transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}

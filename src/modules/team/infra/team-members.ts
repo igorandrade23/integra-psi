@@ -41,7 +41,11 @@ No âmbito pessoal, eu amo ler. Adoro a sensação de estar imersa em palavras, 
     id: "ana-luisa",
     name: "Ana Luísa Bröring",
     role: "Diretora de Pesquisa e Extensão",
-    description: "A definir.",
+    description: `Oi gente! me chamo Ana Luísa, tenho 20 anos e estou no 4° semestre de psicologia na UNIVALI campus Biguaçu.
+  Ao longo da minha trajetória acadêmica e até mesmo antes dela, o que mais me encanta é a Psicologia Social, Psicologia Jurídica e Políticas Públicas sempre a partir de uma lente fenomenológica, que enxerga essa troca constante entre indivíduo e mundo de forma integral. Também carrego um apreço enorme pela área de pesquisa e desenvolvimento científico. Acredito muito na potência que a produção de conhecimento científico tem para o futuro da psicologia, especialmente quando ela se volta para a atuação social e comunitária.
+   No âmbito pessoal, eu sou apaixonada pelo o cinema, música e literatura brasileira. Adoro me sentir imersa em perspectivas e culturas que falam da nossa realidade.
+Além disso amo estar em contato com a natureza, seja na praia, cachoeira ou um parque. Amo o silêncio e a paz que encontro nesses lugares e uso desses momentos pra reabastecer as energias e voltar pro mundo com mais presença.
+   Estar no Centro Acadêmico para mim é construir em coletivo um espaço de fortalecimento de vínculos entre estudantes e instituição, além de uma oportunidade valiosa para ampliar caminhos acadêmicos, pessoais e políticos. Acredito que, por meio desse estreitamento, podemos construir uma vivência universitária mais participativa, acolhedora e transformadora.`,
     photo: "/images/chapa/membros/ana-luisa.png",
   },
   {

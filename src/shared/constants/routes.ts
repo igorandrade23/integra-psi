@@ -7,7 +7,7 @@ export const appRoutes = [
     icon: Home,
   },
   {
-    href: "/#propostas",
+    href: "/#match",
     label: "Propostas",
     icon: Lightbulb,
   },

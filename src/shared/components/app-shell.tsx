@@ -13,7 +13,7 @@ type AppShellProps = {
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const [activeSection, setActiveSection] = useState<
-    "inicio" | "propostas" | "chapa" | null
+    "inicio" | "match" | "chapa" | null
   >(null);
   const resolvedActiveSection = pathname === "/" ? activeSection : null;
 
@@ -22,7 +22,7 @@ export function AppShell({ children }: AppShellProps) {
       return;
     }
 
-    const sectionIds = ["inicio", "propostas", "chapa"] as const;
+    const sectionIds = ["inicio", "match", "chapa"] as const;
     const sections = sectionIds
       .map((id) => document.getElementById(id))
       .filter((element): element is HTMLElement => Boolean(element));
@@ -35,7 +35,7 @@ export function AppShell({ children }: AppShellProps) {
       const initialHash = window.location.hash.replace("#", "");
       if (
         initialHash === "inicio" ||
-        initialHash === "propostas" ||
+        initialHash === "match" ||
         initialHash === "chapa"
       ) {
         setActiveSection(initialHash);
@@ -46,7 +46,7 @@ export function AppShell({ children }: AppShellProps) {
 
     const onHashChange = () => {
       const nextHash = window.location.hash.replace("#", "");
-      if (nextHash === "inicio" || nextHash === "propostas" || nextHash === "chapa") {
+      if (nextHash === "inicio" || nextHash === "match" || nextHash === "chapa") {
         setActiveSection(nextHash);
       }
     };
@@ -64,7 +64,7 @@ export function AppShell({ children }: AppShellProps) {
         }
 
         const id = topEntry.target.id;
-        if (id === "inicio" || id === "propostas" || id === "chapa") {
+        if (id === "inicio" || id === "match" || id === "chapa") {
           setActiveSection(id);
         }
       },
@@ -109,7 +109,7 @@ export function AppShell({ children }: AppShellProps) {
               </span>
             </Link>
             <Link
-              href="/#propostas"
+              href="/#match"
               className="hidden rounded-full border border-white/10 bg-brand-green-dark px-4 py-2 text-sm font-semibold tracking-[-0.01em] text-white shadow-[0_12px_26px_rgba(69,86,74,0.18)] transition duration-300 hover:-translate-y-0.5 hover:bg-brand-green hover:shadow-[0_16px_30px_rgba(69,86,74,0.22)] active:translate-y-[1px] md:inline-flex"
             >
               Veja as propostas
@@ -125,7 +125,7 @@ export function AppShell({ children }: AppShellProps) {
               const Icon = route.icon;
               const isActive =
                 (route.href === "/" && resolvedActiveSection === "inicio") ||
-                (route.href === "/#propostas" && resolvedActiveSection === "propostas") ||
+                (route.href === "/#match" && resolvedActiveSection === "match") ||
                 (route.href === "/#chapa" && resolvedActiveSection === "chapa");
 
               return (

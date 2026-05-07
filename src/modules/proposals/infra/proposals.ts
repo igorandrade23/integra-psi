@@ -7,7 +7,7 @@ export const proposals: Proposal[] = [
     matchTitle: "Micro-ondas na sala de convivência",
     category: "acolhimento",
     summary:
-      "Disponibilizar um micro-ondas para aquecer lanches e refeições no cotidiano do curso.",
+      "Vamos disponibilizar um micro-ondas para aquecer lanches e refeições no cotidiano do curso.",
     problem:
       "Muitas vezes o intervalo entre aulas é curto e não existe um recurso simples para quem leva comida de casa.",
     action:
@@ -26,7 +26,7 @@ export const proposals: Proposal[] = [
     matchTitle: "Eventos online de formação",
     category: "formação",
     summary:
-      "Promover encontros online com temas relevantes, acessíveis e abertos aos estudantes.",
+      "Iremos promover encontros online com temas relevantes, acessíveis e abertos aos estudantes.",
     problem:
       "Nem sempre os conteúdos extras acontecem em horários ou formatos que alcancem toda a turma.",
     action:
@@ -45,7 +45,7 @@ export const proposals: Proposal[] = [
     matchTitle: "Eventos semestrais planejados",
     category: "integração",
     summary:
-      "Planejar encontros maiores ao longo do semestre para fortalecer vínculos e ampliar vivências.",
+      "Vamos planejar encontros maiores ao longo do semestre para fortalecer vínculos e ampliar vivências.",
     problem:
       "O curso também precisa de experiências coletivas que saiam da rotina da sala de aula.",
     action:
@@ -64,7 +64,7 @@ export const proposals: Proposal[] = [
     matchTitle: "Voluntariado com prática",
     category: "formação",
     summary:
-      "Criar oportunidades para experiências práticas e voluntárias com horas de extensão.",
+      "Pretendemos criar oportunidades para experiências práticas e voluntárias com horas de extensão.",
     problem:
       "Muitos estudantes querem aplicar o que aprendem em ações reais, mas faltam caminhos estruturados.",
     action:
@@ -83,7 +83,7 @@ export const proposals: Proposal[] = [
     matchTitle: "Horas complementares com mais valor",
     category: "transparência",
     summary:
-      "Dar mais visibilidade às oportunidades que ajudam a compor as horas complementares.",
+      "Queremos dar mais visibilidade às oportunidades que ajudam a compor as horas complementares.",
     problem:
       "Nem sempre as atividades disponíveis são divulgadas de forma clara e fácil de acompanhar.",
     action:
@@ -102,7 +102,7 @@ export const proposals: Proposal[] = [
     matchTitle: "Sala de convivência",
     category: "acolhimento",
     summary:
-      "Criar um espaço para pausa, conversa e descanso entre as atividades do curso.",
+      "Vamos criar um espaço para pausa, conversa e descanso entre as atividades do curso.",
     problem:
       "Falta um local pensado para convivência, descompressão e encontros informais.",
     action:
@@ -121,11 +121,11 @@ export const proposals: Proposal[] = [
     matchTitle: "Grupo de leituras",
     category: "integração",
     summary:
-      "Formar um grupo para leitura, debate e troca de ideias sobre temas da Psicologia.",
+      "Vamos formar um grupo para leitura, debate e troca de ideias sobre temas da Psicologia.",
     problem:
       "Nem sempre há um espaço regular para leitura compartilhada e discussão fora da sala de aula.",
     action:
-      "Criar encontros periódicos para leitura orientada e conversa entre estudantes.",
+      "Vamos criar encontros periódicos para leitura orientada e conversa entre estudantes.",
     impact:
       "Mais repertório teórico, vínculo entre colegas e continuidade de estudo coletiva.",
     why:
@@ -140,7 +140,7 @@ export const proposals: Proposal[] = [
     matchTitle: "Sugestões dos estudantes",
     category: "transparência",
     summary:
-      "Manter uma escuta constante para que estudantes possam sugerir melhorias e ideias.",
+      "Vamos manter uma escuta constante para que estudantes possam sugerir melhorias e ideias.",
     problem:
       "Sem um canal ativo de retorno, muitas demandas importantes podem se perder no caminho.",
     action:
